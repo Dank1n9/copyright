@@ -117,6 +117,66 @@
             color: #555;
         }
 
+        /* 嵌入代码板块 */
+        .embed-item {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .embed-code {
+            font-family: 'Courier New', monospace;
+            background: #f6f6f6;
+            padding: 0.7rem 3rem 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-left: 3px solid #888;
+            border-radius: 2px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow-x: auto;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            user-select: all;
+            display: block;
+        }
+
+        .embed-code:hover {
+            background: #eef0f2;
+            border-color: #aaa;
+        }
+
+        .embed-code.copied {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.72rem;
+            font-family: 'Georgia', serif;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .copy-btn.done {
+            background: #4caf50;
+            color: #fff;
+            border-color: #4caf50;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 1rem;
@@ -126,6 +186,10 @@
             }
             .identity-box {
                 padding: 1rem;
+            }
+            .embed-code {
+                font-size: 0.75rem;
+                padding-right: 3.5rem;
             }
         }
     </style>
@@ -180,9 +244,25 @@
         <div class="section-title">法律效力说明</div>
         <p>根据《中华人民共和国著作权法》，著作权自作品创作完成之日起自动产生。本声明是权利人向社会公示权利归属的方式，具有警示和证据效力。任何未经 <strong>shiorko@qq.com</strong> 明确授权的使用行为，均可能构成侵权，Shiorko|希科 保留追究法律责任的权利。</p>
 
+        <hr>
+
+        <!-- 嵌入代码 -->
+        <div class="section-title">嵌入代码</div>
+        <p style="font-size:0.9rem;color:#555;margin-bottom:0.6rem;">点击代码块或右侧按钮即可复制，可粘贴至您的网页中使用。</p>
+
+        <div class="embed-item">
+            <code class="embed-code" id="embed1" onclick="copyEmbed('embed1','btn1')">&lt;a href="https://copyright.shiorko.dpdns.org" target="_blank"&gt;© 2026 Shiorko. All rights reserved.&lt;/a&gt;</code>
+            <button class="copy-btn" id="btn1" onclick="copyEmbed('embed1','btn1')">复制</button>
+        </div>
+
+        <div class="embed-item">
+            <code class="embed-code" id="embed2" onclick="copyEmbed('embed2','btn2')">&lt;a href="https://copyright.shiorko.dpdns.org" target="_blank"&gt;© 2026 希科. All rights reserved.&lt;/a&gt;</code>
+            <button class="copy-btn" id="btn2" onclick="copyEmbed('embed2','btn2')">复制</button>
+        </div>
+
         <!-- 页面本身的版权 -->
         <div style="margin-top: 2rem; font-size: 0.8rem; color: #666; text-align: center; border-top: 1px solid #eee; padding-top: 1rem;">
-            <p>© 2026 Shiorko. 本页面内容亦受版权保护，未经许可不得复制。</p>
+            <p>© 2025-2026 Shiorko. 本页面内容亦受版权保护，未经许可不得复制。</p>
             <p>邮箱持有人身份声明：shiorko@qq.com 是 Shiorko 的唯一官方身份凭证。</p>
         </div>
     </div>
@@ -191,5 +271,41 @@
         最后更新：2026年4月 · 本声明长期有效
     </div>
 </div>
+
+<script>
+function copyEmbed(codeId, btnId) {
+    var el = document.getElementById(codeId);
+    var btn = document.getElementById(btnId);
+    var text = el.textContent;
+
+    navigator.clipboard.writeText(text).then(function() {
+        el.classList.add('copied');
+        btn.classList.add('done');
+        btn.textContent = '已复制';
+        setTimeout(function() {
+            el.classList.remove('copied');
+            btn.classList.remove('done');
+            btn.textContent = '复制';
+        }, 1800);
+    }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        el.classList.add('copied');
+        btn.classList.add('done');
+        btn.textContent = '已复制';
+        setTimeout(function() {
+            el.classList.remove('copied');
+            btn.classList.remove('done');
+            btn.textContent = '复制';
+        }, 1800);
+    });
+}
+</script>
 </body>
 </html>
